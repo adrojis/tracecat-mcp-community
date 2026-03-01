@@ -1,0 +1,25 @@
+{
+  "name": "tracecat-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for Tracecat SOAR platform",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "build": "tsc",
+    "dev": "tsx --watch src/index.ts"
+  },
+  "keywords": ["mcp", "tracecat", "soar", "security", "automation"],
+  "author": "adrojis",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "dotenv": "^16.4.7",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3"
+  }
+}
