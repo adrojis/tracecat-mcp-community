@@ -1,0 +1,3 @@
+# tracecat-mcp
+
+Initializing repository...
