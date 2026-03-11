@@ -47,8 +47,7 @@ export class TracecatClient {
     });
 
     if (!response.ok && response.status !== 204 && response.status !== 302) {
-      const text = await response.text();
-      throw new Error(`Login failed (${response.status}): ${text}`);
+      throw new Error(`Login failed (${response.status}). Check your TRACECAT_USERNAME and TRACECAT_PASSWORD in .env`);
     }
 
     // Extract session cookie from set-cookie header
@@ -70,8 +69,8 @@ export class TracecatClient {
     }
 
     throw new Error(
-      "Login succeeded but no session cookie received. Headers: " +
-        JSON.stringify([...response.headers.entries()])
+      "Login succeeded but no session cookie received. " +
+        "Check that the Tracecat API is returning a 'fastapiusersauth' cookie."
     );
   }
 
@@ -171,5 +170,18 @@ export class TracecatClient {
 
   getWorkspaceId(): string {
     return this.workspaceId;
+  }
+
+  /** Fetch current graph then apply operations with optimistic locking */
+  async patchGraph(workflowId: string, operations: Array<{ type: string; payload: Record<string, unknown> }>): Promise<unknown> {
+    // 1. Get current graph to read base_version (version is at root level)
+    const graph = await this.get<{ version: number }>(`/workflows/${workflowId}/graph`);
+    const baseVersion = graph.version;
+
+    // 2. Patch with operations
+    return this.patch(`/workflows/${workflowId}/graph`, {
+      base_version: baseVersion,
+      operations,
+    });
   }
 }

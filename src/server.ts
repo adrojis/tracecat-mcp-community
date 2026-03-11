@@ -9,6 +9,9 @@ import { registerTableTools } from "./tools/tables.js";
 import { registerWebhookTools } from "./tools/webhooks.js";
 import { registerSystemTools } from "./tools/system.js";
 import { registerScheduleTools } from "./tools/schedules.js";
+import { registerGraphTools } from "./tools/graph.js";
+import { registerDocTools } from "./tools/docs.js";
+import { registerTemplateTools } from "./tools/templates.js";
 
 export function createServer(client: TracecatClient): McpServer {
   const server = new McpServer({
@@ -25,6 +28,9 @@ export function createServer(client: TracecatClient): McpServer {
   registerWebhookTools(server, client);
   registerScheduleTools(server, client);
   registerSystemTools(server, client);
+  registerGraphTools(server, client);
+  registerDocTools(server, client);
+  registerTemplateTools(server, client);
 
   return server;
 }
