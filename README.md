@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![npm version](https://img.shields.io/npm/v/tracecat-mcp.svg)](https://www.npmjs.com/package/tracecat-mcp)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
-[![Tests](https://img.shields.io/badge/tests-7%20passing-brightgreen.svg)](#testing)
+[![CI](https://github.com/adrojis/tracecat-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/adrojis/tracecat-mcp/actions/workflows/ci.yml)
 [![Tracecat](https://img.shields.io/badge/Tracecat-v1.0.0--beta.31-purple.svg)](https://github.com/TracecatHQ/tracecat)
 [![MCP](https://img.shields.io/badge/MCP-Server-green.svg)](https://modelcontextprotocol.io)
 [![Docker](https://img.shields.io/badge/Docker-ready-blue.svg)](#docker)
