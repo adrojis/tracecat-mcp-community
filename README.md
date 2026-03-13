@@ -174,6 +174,22 @@ node dist/index.js
 
 ---
 
+## Roadmap
+
+This project is under active development. Tracecat's API surface evolves fast, and we intend to keep up — expect new tools, refinements, and breaking-change adaptations as the platform matures.
+
+Planned areas of improvement:
+
+- **More tools** — covering new Tracecat API endpoints as they ship
+- **Better error handling** — structured error responses with actionable hints
+- **OAuth/OIDC support** — for Tracecat instances using SSO instead of basic auth
+- **npx one-liner** — `npx tracecat-mcp` for zero-install usage
+- **Test suite** — automated integration tests against a live Tracecat instance
+
+Contributions, issues, and feature requests are welcome.
+
+---
+
 ## Related Projects
 
 - [tracecat-skills](https://github.com/adrojis/tracecat-skills) — Claude Code skills for Tracecat workflow building
