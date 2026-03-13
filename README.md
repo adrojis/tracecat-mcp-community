@@ -212,6 +212,18 @@ npm test
 
 Tests use Node.js built-in test runner (no extra dependencies). See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
+## MCP Inspector
+
+The [MCP Inspector](https://github.com/modelcontextprotocol/inspector) is a visual debugging tool that lets you browse and test all 49 tools interactively in your browser — useful for verifying your setup, exploring tool schemas, and testing API calls without Claude.
+
+From the project root:
+
+```bash
+npx @modelcontextprotocol/inspector node dist/index.js
+```
+
+This starts a local web UI (default: `http://localhost:6274`). Click the **Tools** tab to see all available tools, inspect their input schemas, and execute them against your Tracecat instance.
+
 ---
 
 ## Roadmap
