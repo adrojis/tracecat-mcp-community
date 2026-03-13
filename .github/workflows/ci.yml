@@ -47,6 +47,9 @@ jobs:
           echo "Build output verified"
 
       - name: Test MCP handshake
+        env:
+          TRACECAT_USERNAME: ci@test.com
+          TRACECAT_PASSWORD: ci-test-dummy
         run: |
           echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"ci","version":"1.0"}}}' \
             | timeout 5 node dist/index.js 2>/dev/null \
@@ -66,7 +69,7 @@ jobs:
       - name: Verify Docker image
         run: |
           echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"ci","version":"1.0"}}}' \
-            | docker run -i --rm tracecat-mcp:test 2>/dev/null \
+            | docker run -i --rm -e TRACECAT_USERNAME=ci@test.com -e TRACECAT_PASSWORD=ci-test-dummy tracecat-mcp:test 2>/dev/null \
             | grep -q '"name":"tracecat"' \
             && echo "Docker MCP handshake OK" \
             || (echo "Docker MCP handshake failed" && exit 1)
