@@ -1,16 +1,29 @@
 # tracecat-mcp
 
+**A Model Context Protocol (MCP) server for the [Tracecat](https://tracecat.com) SOAR platform — 49 tools across 12 domains.**
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Tracecat Compatible](https://img.shields.io/badge/Tracecat-v1.0.0--beta.9-purple.svg)](https://github.com/TracecatHQ/tracecat)
+[![Tracecat](https://img.shields.io/badge/Tracecat-v1.0.0--beta.31-purple.svg)](https://github.com/TracecatHQ/tracecat)
 [![MCP](https://img.shields.io/badge/MCP-Server-green.svg)](https://modelcontextprotocol.io)
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for the [Tracecat](https://tracecat.com) SOAR platform. Provides **44 tools** across 9 domains, enabling AI assistants to manage workflows, cases, actions, secrets, tables, and more through natural language.
+---
+
+## What is this?
+
+An [MCP server](https://modelcontextprotocol.io) that gives AI assistants (Claude Code, Claude Desktop, etc.) full control over a [Tracecat](https://github.com/TracecatHQ/tracecat) instance through natural language. Manage workflows, actions, cases, secrets, tables, schedules, and more — without leaving your editor.
+
+- **49 tools** covering the full Tracecat API surface
+- **Lazy authentication** — MCP transport starts instantly, login happens on first tool call
+- **Auto workspace detection** — no manual workspace ID needed
+- **Session cookie auth** — handles Tracecat's cookie-based auth transparently
+
+---
 
 ## Tools
 
 | Domain | Tools | Description |
 |---|---|---|
-| **Workflows** | 7 | List, create, get, update, deploy, export, delete workflows |
+| **Workflows** | 9 | List, create, get, update, deploy, export, delete, validate, autofix |
 | **Actions** | 5 | List, create, get, update, delete workflow actions |
 | **Executions** | 5 | Run workflows, list/get/cancel executions, compact view |
 | **Cases** | 7 | List, create, get, update, delete cases; add/list comments |
@@ -19,30 +32,52 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for the
 | **Columns** | 2 | Create, delete table columns |
 | **Rows** | 6 | List, get, insert, update, delete, batch insert rows |
 | **Schedules** | 5 | List, create, get, update, delete schedules |
+| **Graph** | 3 | Add edges, move nodes, update trigger position |
 | **Webhooks** | 1 | Generate/rotate webhook API keys |
+| **Docs** | 2 | Search Tracecat docs, list available tool documentation |
+| **Templates** | 2 | List and get community workflow templates |
 | **System** | 1 | Health check |
 
-> **Total: 44 tools** covering the full Tracecat API surface.
+> **Total: 49 tools** for complete Tracecat automation.
+
+---
 
 ## Quick Start
 
+### 1. Clone and install
+
 ```bash
-# Clone
 git clone https://github.com/adrojis/tracecat-mcp.git
 cd tracecat-mcp
-
-# Install dependencies
 npm install
+```
 
-# Configure environment
+### 2. Configure credentials
+
+```bash
 cp .env.example .env
-# Edit .env with your Tracecat credentials
+```
 
-# Build
+Edit `.env` with your Tracecat credentials:
+
+```env
+TRACECAT_API_URL=http://localhost/api
+TRACECAT_USERNAME=your-email@example.com
+TRACECAT_PASSWORD=your-password-here
+TRACECAT_WORKSPACE_ID=              # Optional — auto-detected if omitted
+```
+
+> **Security:** `.env` is gitignored and never committed. Never hardcode credentials in source files.
+
+### 3. Build
+
+```bash
 npm run build
 ```
 
-Add to your Claude Code `.mcp.json`:
+### 4. Add to Claude Code
+
+Add this to your `.mcp.json` (project root or `~/.claude/.mcp.json` for global):
 
 ```json
 {
@@ -55,16 +90,22 @@ Add to your Claude Code `.mcp.json`:
 }
 ```
 
+Then restart Claude Code. Verify with `/mcp` — you should see the `tracecat` server with 49 tools.
+
+---
+
 ## Configuration
 
 | Variable | Required | Default | Description |
 |---|---|---|---|
 | `TRACECAT_API_URL` | No | `http://localhost/api` | Tracecat API base URL |
-| `TRACECAT_USERNAME` | **Yes** | - | Login email |
-| `TRACECAT_PASSWORD` | **Yes** | - | Login password |
+| `TRACECAT_USERNAME` | **Yes** | — | Login email |
+| `TRACECAT_PASSWORD` | **Yes** | — | Login password |
 | `TRACECAT_WORKSPACE_ID` | No | Auto-detected | Workspace ID (uses first workspace if omitted) |
 
-Credentials are loaded from `.env` in the project root via [dotenv](https://github.com/motdotla/dotenv).
+Credentials are loaded from `.env` via [dotenv](https://github.com/motdotla/dotenv). The `.env` file must be in the project root (next to `package.json`).
+
+---
 
 ## Architecture
 
@@ -72,19 +113,24 @@ Credentials are loaded from `.env` in the project root via [dotenv](https://gith
 src/
 ├── index.ts          # Entry point — StdioTransport + env loading
 ├── server.ts         # McpServer creation + tool registration
-├── client.ts         # HTTP client with lazy auth
+├── client.ts         # HTTP client with lazy auth + auto workspace injection
 ├── types.ts          # TypeScript interfaces
 └── tools/
-    ├── workflows.ts  # Workflow CRUD + deploy/export
+    ├── workflows.ts  # Workflow CRUD + deploy/export/validate/autofix
     ├── actions.ts    # Action CRUD with YAML inputs
     ├── cases.ts      # Case management + comments
     ├── executions.ts # Run, list, cancel, inspect executions
     ├── secrets.ts    # Secret management
     ├── tables.ts     # Tables, columns, and rows
+    ├── graph.ts      # Graph operations (edges, node positions)
     ├── webhooks.ts   # Webhook key rotation
     ├── schedules.ts  # Cron/interval scheduling
+    ├── docs.ts       # Documentation search
+    ├── templates.ts  # Community workflow templates
     └── system.ts     # Health check
 ```
+
+---
 
 ## Key Design Decisions
 
@@ -95,10 +141,13 @@ src/
 | **YAML string inputs** | Action `inputs` are sent as YAML strings per the Tracecat API contract, not JSON objects. |
 | **POST for updates** | Actions, secrets, and schedules use `POST` for updates instead of the conventional `PATCH`. |
 | **Auto workspace injection** | `workspace_id` is auto-detected and injected as a query parameter on every request. |
+| **Optimistic locking** | Graph operations read `base_version` before patching to prevent concurrent edit conflicts. |
+
+---
 
 ## API Quirks
 
-These behaviors differ from typical REST conventions and are handled by the server:
+These behaviors differ from typical REST conventions and are handled transparently by the server:
 
 | Quirk | Details |
 |---|---|
@@ -107,6 +156,8 @@ These behaviors differ from typical REST conventions and are handled by the serv
 | Actions list endpoint | `GET /actions?workflow_id=...` (not nested under `/workflows`) |
 | Action inputs format | YAML string, not JSON object |
 | Workflow list pagination | Returns `{ items: [...], next_cursor }`, not a plain array |
+
+---
 
 ## Development
 
@@ -121,10 +172,15 @@ npm run build
 node dist/index.js
 ```
 
+---
+
 ## Related Projects
 
-- [Tracecat](https://github.com/TracecatHQ/tracecat) - The open-source SOAR platform
-- [MCP SDK](https://github.com/modelcontextprotocol/typescript-sdk) - Model Context Protocol TypeScript SDK
+- [tracecat-skills](https://github.com/adrojis/tracecat-skills) — Claude Code skills for Tracecat workflow building
+- [Tracecat](https://github.com/TracecatHQ/tracecat) — The open-source SOAR platform
+- [MCP SDK](https://github.com/modelcontextprotocol/typescript-sdk) — Model Context Protocol TypeScript SDK
+
+---
 
 ## License
 

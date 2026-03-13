@@ -39,7 +39,7 @@ All expressions use: \`\${{ CONTEXT.path }}\`
 
 ## Contexts
 | Context | Description | Example |
-|---------|-------------|--------|
+|---------|-------------|---------|
 | \`TRIGGER\` | Webhook/schedule input data | \`\${{ TRIGGER.alert.source_ip }}\` |
 | \`ACTIONS\` | Results from previous actions | \`\${{ ACTIONS.my_action.result }}\` |
 | \`ACTIONS.*.error\` | Error from failed action | \`\${{ ACTIONS.my_action.error }}\` |
@@ -77,7 +77,7 @@ run_if: \${{ ACTIONS.is_malicious.result && ACTIONS.is_public.result }}
 
 ## String Functions
 | Function | Description | Example |
-|----------|-------------|--------|
+|----------|-------------|---------|
 | \`FN.upper(s)\` | Uppercase | \`\${{ FN.upper(TRIGGER.name) }}\` |
 | \`FN.lower(s)\` | Lowercase | \`\${{ FN.lower(TRIGGER.name) }}\` |
 | \`FN.contains(s, sub)\` | Check substring | \`\${{ FN.contains(TRIGGER.url, "malware") }}\` |
@@ -87,7 +87,7 @@ run_if: \${{ ACTIONS.is_malicious.result && ACTIONS.is_public.result }}
 
 ## Type / Conversion Functions
 | Function | Description | Example |
-|----------|-------------|--------|
+|----------|-------------|---------|
 | \`FN.is_empty(v)\` | Check if null/empty | \`\${{ FN.is_empty(ACTIONS.x.result) }}\` |
 | \`FN.is_not_empty(v)\` | Check if not empty | \`\${{ FN.is_not_empty(ACTIONS.x.result) }}\` |
 | \`FN.serialize_json(v)\` | Object → JSON string | \`\${{ FN.serialize_json(ACTIONS.x.result) }}\` |
@@ -97,13 +97,13 @@ run_if: \${{ ACTIONS.is_malicious.result && ACTIONS.is_public.result }}
 
 ## Network Functions
 | Function | Description | Example |
-|----------|-------------|--------|
+|----------|-------------|---------|
 | \`FN.ipv4_is_public(ip)\` | Check if IPv4 is public | \`\${{ FN.ipv4_is_public(TRIGGER.ip) }}\` |
 | \`FN.ipv4_in_subnet(ip, cidr)\` | Check if in subnet | \`\${{ FN.ipv4_in_subnet(TRIGGER.ip, "10.0.0.0/8") }}\` |
 
 ## Collection Functions
 | Function | Description | Example |
-|----------|-------------|--------|
+|----------|-------------|---------|
 | \`FN.length(list)\` | Length of list | \`\${{ FN.length(ACTIONS.x.result) }}\` |
 | \`FN.flatten(list)\` | Flatten nested list | \`\${{ FN.flatten(ACTIONS.x.result) }}\` |
 | \`FN.unique(list)\` | Deduplicate list | \`\${{ FN.unique(ACTIONS.x.result) }}\` |
@@ -111,7 +111,7 @@ run_if: \${{ ACTIONS.is_malicious.result && ACTIONS.is_public.result }}
 
 ## Math Functions
 | Function | Description | Example |
-|----------|-------------|--------|
+|----------|-------------|---------|
 | \`FN.add(a, b)\` | Addition | \`\${{ FN.add(ACTIONS.x.result, 1) }}\` |
 | \`FN.sub(a, b)\` | Subtraction | \`\${{ FN.sub(ACTIONS.x.result, 1) }}\` |
 | \`FN.less_than(a, b)\` | a < b | \`\${{ FN.less_than(ACTIONS.x.result, 50) }}\` |
@@ -119,7 +119,7 @@ run_if: \${{ ACTIONS.is_malicious.result && ACTIONS.is_public.result }}
 
 ## Conditional
 | Function | Description | Example |
-|----------|-------------|--------|
+|----------|-------------|---------|
 | \`FN.conditional(cond, a, b)\` | Ternary | \`\${{ FN.conditional(ACTIONS.x.result, "yes", "no") }}\` |`,
 
   control_flow: `# Tracecat Control Flow Reference
