@@ -3,8 +3,12 @@
 **A Model Context Protocol (MCP) server for the [Tracecat](https://tracecat.com) SOAR platform — 49 tools across 12 domains.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![npm version](https://img.shields.io/npm/v/tracecat-mcp.svg)](https://www.npmjs.com/package/tracecat-mcp)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
+[![Tests](https://img.shields.io/badge/tests-7%20passing-brightgreen.svg)](#testing)
 [![Tracecat](https://img.shields.io/badge/Tracecat-v1.0.0--beta.31-purple.svg)](https://github.com/TracecatHQ/tracecat)
 [![MCP](https://img.shields.io/badge/MCP-Server-green.svg)](https://modelcontextprotocol.io)
+[![Docker](https://img.shields.io/badge/Docker-ready-blue.svg)](#docker)
 
 ---
 
@@ -44,21 +48,14 @@ An [MCP server](https://modelcontextprotocol.io) that gives AI assistants (Claud
 
 ## Quick Start
 
-### 1. Clone and install
+### Option A: npx (fastest)
 
 ```bash
-git clone https://github.com/adrojis/tracecat-mcp.git
-cd tracecat-mcp
-npm install
+# Install globally
+npm install -g tracecat-mcp
 ```
 
-### 2. Configure credentials
-
-```bash
-cp .env.example .env
-```
-
-Edit `.env` with your Tracecat credentials:
+Create a `.env` file wherever you run from (or in the package directory):
 
 ```env
 TRACECAT_API_URL=http://localhost/api
@@ -67,17 +64,30 @@ TRACECAT_PASSWORD=your-password-here
 TRACECAT_WORKSPACE_ID=              # Optional — auto-detected if omitted
 ```
 
-> **Security:** `.env` is gitignored and never committed. Never hardcode credentials in source files.
+Add to your `.mcp.json`:
 
-### 3. Build
+```json
+{
+  "mcpServers": {
+    "tracecat": {
+      "command": "npx",
+      "args": ["-y", "tracecat-mcp"]
+    }
+  }
+}
+```
+
+### Option B: From source
 
 ```bash
+git clone https://github.com/adrojis/tracecat-mcp.git
+cd tracecat-mcp
+npm install
+cp .env.example .env    # Edit with your credentials
 npm run build
 ```
 
-### 4. Add to Claude Code
-
-Add this to your `.mcp.json` (project root or `~/.claude/.mcp.json` for global):
+Add to your `.mcp.json`:
 
 ```json
 {
@@ -90,7 +100,28 @@ Add this to your `.mcp.json` (project root or `~/.claude/.mcp.json` for global):
 }
 ```
 
-Then restart Claude Code. Verify with `/mcp` — you should see the `tracecat` server with 49 tools.
+### Option C: Docker
+
+```bash
+git clone https://github.com/adrojis/tracecat-mcp.git
+cd tracecat-mcp
+docker build -t tracecat-mcp .
+```
+
+```json
+{
+  "mcpServers": {
+    "tracecat": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "--env-file", "/path/to/.env", "tracecat-mcp"]
+    }
+  }
+}
+```
+
+> **Security:** `.env` is gitignored and never committed. Never hardcode credentials in source files. See [SECURITY.md](SECURITY.md).
+
+Then restart Claude Code and verify with `/mcp` — you should see the `tracecat` server with 49 tools.
 
 ---
 
@@ -171,6 +202,15 @@ npm run build
 # Run directly
 node dist/index.js
 ```
+
+## Testing
+
+```bash
+npm run build
+npm test
+```
+
+Tests use Node.js built-in test runner (no extra dependencies). See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ---
 

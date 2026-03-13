@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { config } from "dotenv";
 import { fileURLToPath } from "url";
 import { dirname, resolve } from "path";
