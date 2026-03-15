@@ -168,11 +168,19 @@ src/
 | Decision | Rationale |
 |---|---|
 | **Lazy initialization** | MCP transport starts immediately; login happens on first tool call. Avoids blocking Claude Code startup. |
-| **Session cookies** | Tracecat uses `fastapiusersauth` cookies, not API keys. The client handles login and cookie extraction automatically. |
+| **Session cookies** | Tracecat currently uses `fastapiusersauth` cookies, not API keys. The client handles login and cookie extraction automatically. See note below on upcoming API token support. |
 | **YAML string inputs** | Action `inputs` are sent as YAML strings per the Tracecat API contract, not JSON objects. |
 | **POST for updates** | Actions, secrets, and schedules use `POST` for updates instead of the conventional `PATCH`. |
 | **Auto workspace injection** | `workspace_id` is auto-detected and injected as a query parameter on every request. |
 | **Optimistic locking** | Graph operations read `base_version` before patching to prevent concurrent edit conflicts. |
+
+---
+
+## Authentication Roadmap
+
+This server currently authenticates via **username/password** (session cookies). The Tracecat team is actively working on **API token authentication**, which will provide a simpler and more secure connection method — no more password in `.env`.
+
+We will add API token support as soon as it becomes available upstream. The username/password method will remain supported for backward compatibility.
 
 ---
 
@@ -235,7 +243,6 @@ Planned areas of improvement:
 - **More tools** — covering new Tracecat API endpoints as they ship
 - **Better error handling** — structured error responses with actionable hints
 - **OAuth/OIDC support** — for Tracecat instances using SSO instead of basic auth
-- **npx one-liner** — `npx tracecat-mcp` for zero-install usage
 - **Test suite** — automated integration tests against a live Tracecat instance
 
 Contributions, issues, and feature requests are welcome.

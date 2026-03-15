@@ -2,4 +2,7 @@ node_modules/
 dist/
 .env
 *.js.map
+*.tgz
+.DS_Store
+coverage/
 mcp_debug.log
