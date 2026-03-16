@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/banner.png" alt="Tracecat MCP Banner" width="100%">
+</p>
+
 # tracecat-mcp
 
 **A Model Context Protocol (MCP) server for the [Tracecat](https://tracecat.com) SOAR platform — 49 tools across 12 domains.**
