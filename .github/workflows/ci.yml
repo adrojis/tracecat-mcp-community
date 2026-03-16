@@ -63,12 +63,12 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Build Docker image
-        run: docker build -t tracecat-mcp:test .
+        run: docker build -t tracecat-mcp-community:test .
 
       - name: Verify Docker image
         run: |
           echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"ci","version":"1.0"}}}' \
-            | docker run -i --rm -e TRACECAT_USERNAME=ci@test.com -e TRACECAT_PASSWORD=ci-test-dummy tracecat-mcp:test 2>/dev/null \
+            | docker run -i --rm -e TRACECAT_USERNAME=ci@test.com -e TRACECAT_PASSWORD=ci-test-dummy tracecat-mcp-community:test 2>/dev/null \
             | grep -q '"name":"tracecat"' \
             && echo "Docker MCP handshake OK" \
             || (echo "Docker MCP handshake failed" && exit 1)

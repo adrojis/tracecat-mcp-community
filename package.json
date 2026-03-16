@@ -1,11 +1,11 @@
 {
-  "name": "tracecat-mcp",
+  "name": "tracecat-mcp-community",
   "version": "1.0.0",
   "description": "MCP server for Tracecat SOAR platform — 49 tools for workflows, actions, cases, secrets, tables, and more",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "tracecat-mcp": "dist/index.js"
+    "tracecat-mcp-community": "dist/index.js"
   },
   "files": [
     "dist",
@@ -34,11 +34,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/adrojis/tracecat-mcp.git"
+    "url": "https://github.com/adrojis/tracecat-mcp-community.git"
   },
-  "homepage": "https://github.com/adrojis/tracecat-mcp",
+  "homepage": "https://github.com/adrojis/tracecat-mcp-community",
   "bugs": {
-    "url": "https://github.com/adrojis/tracecat-mcp/issues"
+    "url": "https://github.com/adrojis/tracecat-mcp-community/issues"
   },
   "engines": {
     "node": ">=18.0.0"

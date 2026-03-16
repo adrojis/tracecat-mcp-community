@@ -2,14 +2,14 @@
   <img src="assets/banner.png" alt="Tracecat MCP Banner" width="100%">
 </p>
 
-# tracecat-mcp
+# tracecat-mcp-community
 
 **A Model Context Protocol (MCP) server for the [Tracecat](https://tracecat.com) SOAR platform — 49 tools across 12 domains.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![npm version](https://img.shields.io/npm/v/tracecat-mcp.svg)](https://www.npmjs.com/package/tracecat-mcp)
+[![npm version](https://img.shields.io/npm/v/tracecat-mcp-community.svg)](https://www.npmjs.com/package/tracecat-mcp-community)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
-[![CI](https://github.com/adrojis/tracecat-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/adrojis/tracecat-mcp/actions/workflows/ci.yml)
+[![CI](https://github.com/adrojis/tracecat-mcp-community/actions/workflows/ci.yml/badge.svg)](https://github.com/adrojis/tracecat-mcp-community/actions/workflows/ci.yml)
 [![Tracecat](https://img.shields.io/badge/Tracecat-v1.0.0--beta.31-purple.svg)](https://github.com/TracecatHQ/tracecat)
 [![MCP](https://img.shields.io/badge/MCP-Server-green.svg)](https://modelcontextprotocol.io)
 [![Docker](https://img.shields.io/badge/Docker-ready-blue.svg)](#docker)
@@ -56,7 +56,7 @@ An [MCP server](https://modelcontextprotocol.io) that gives AI assistants (Claud
 
 ```bash
 # Install globally
-npm install -g tracecat-mcp
+npm install -g tracecat-mcp-community
 ```
 
 Create a `.env` file wherever you run from (or in the package directory):
@@ -75,7 +75,7 @@ Add to your `.mcp.json`:
   "mcpServers": {
     "tracecat": {
       "command": "npx",
-      "args": ["-y", "tracecat-mcp"]
+      "args": ["-y", "tracecat-mcp-community"]
     }
   }
 }
@@ -84,8 +84,8 @@ Add to your `.mcp.json`:
 ### Option B: From source
 
 ```bash
-git clone https://github.com/adrojis/tracecat-mcp.git
-cd tracecat-mcp
+git clone https://github.com/adrojis/tracecat-mcp-community.git
+cd tracecat-mcp-community
 npm install
 cp .env.example .env    # Edit with your credentials
 npm run build
@@ -98,7 +98,7 @@ Add to your `.mcp.json`:
   "mcpServers": {
     "tracecat": {
       "command": "node",
-      "args": ["/absolute/path/to/tracecat-mcp/dist/index.js"]
+      "args": ["/absolute/path/to/tracecat-mcp-community/dist/index.js"]
     }
   }
 }
@@ -107,9 +107,9 @@ Add to your `.mcp.json`:
 ### Option C: Docker
 
 ```bash
-git clone https://github.com/adrojis/tracecat-mcp.git
-cd tracecat-mcp
-docker build -t tracecat-mcp .
+git clone https://github.com/adrojis/tracecat-mcp-community.git
+cd tracecat-mcp-community
+docker build -t tracecat-mcp-community .
 ```
 
 ```json
@@ -117,7 +117,7 @@ docker build -t tracecat-mcp .
   "mcpServers": {
     "tracecat": {
       "command": "docker",
-      "args": ["run", "-i", "--rm", "--env-file", "/path/to/.env", "tracecat-mcp"]
+      "args": ["run", "-i", "--rm", "--env-file", "/path/to/.env", "tracecat-mcp-community"]
     }
   }
 }
@@ -256,6 +256,7 @@ Contributions, issues, and feature requests are welcome.
 ## Related Projects
 
 - [tracecat-skills](https://github.com/adrojis/tracecat-skills) — Claude Code skills for Tracecat workflow building
+> **Note:** This project was previously named `tracecat-mcp`. It has been renamed to `tracecat-mcp-community` to clearly distinguish it from [Tracecat's official MCP server](https://github.com/TracecatHQ/tracecat) which uses OAuth authentication.
 - [Tracecat](https://github.com/TracecatHQ/tracecat) — The open-source SOAR platform
 - [MCP SDK](https://github.com/modelcontextprotocol/typescript-sdk) — Model Context Protocol TypeScript SDK
 

@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial public release with **49 MCP tools** across 12 domains
-- Published on [npm](https://www.npmjs.com/package/tracecat-mcp) — install with `npx tracecat-mcp`
+- Published on [npm](https://www.npmjs.com/package/tracecat-mcp-community) — install with `npx tracecat-mcp-community`
 - **Workflows** — list, create, get, update, deploy, export, delete, validate, autofix
 - **Actions** — CRUD with YAML input support
 - **Executions** — run workflows, list/get/cancel executions, compact view

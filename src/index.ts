@@ -29,9 +29,9 @@ const transport = new StdioServerTransport();
 
 // Start MCP transport immediately - login happens lazily on first tool call
 server.connect(transport).then(() => {
-  process.stderr.write("[tracecat-mcp] MCP server ready (login will happen on first request)\n");
+  process.stderr.write("[tracecat-mcp-community] MCP server ready (login will happen on first request)\n");
 }).catch((error) => {
-  process.stderr.write(`[tracecat-mcp] Fatal error: ${error}\n`);
+  process.stderr.write(`[tracecat-mcp-community] Fatal error: ${error}\n`);
   process.exit(1);
 });
 

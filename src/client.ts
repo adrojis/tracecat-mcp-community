@@ -27,8 +27,8 @@ export class TracecatClient {
         await this.login();
         await this.initWorkspaceId();
         this.initialized = true;
-        console.error("[tracecat-mcp] Login successful");
-        console.error(`[tracecat-mcp] Workspace: ${this.workspaceId || "(none)"}`);
+        console.error("[tracecat-mcp-community] Login successful");
+        console.error(`[tracecat-mcp-community] Workspace: ${this.workspaceId || "(none)"}`);
       })();
     }
     await this.initPromise;

@@ -2,10 +2,10 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in tracecat-mcp, please report it responsibly:
+If you discover a security vulnerability in tracecat-mcp-community, please report it responsibly:
 
 1. **Do not** open a public GitHub issue
-2. Email **security concerns** via GitHub private vulnerability reporting: [Report a vulnerability](https://github.com/adrojis/tracecat-mcp/security/advisories/new)
+2. Email **security concerns** via GitHub private vulnerability reporting: [Report a vulnerability](https://github.com/adrojis/tracecat-mcp-community/security/advisories/new)
 
 We will acknowledge your report within 48 hours and provide a timeline for a fix.
 

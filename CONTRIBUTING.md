@@ -1,12 +1,12 @@
-# Contributing to tracecat-mcp
+# Contributing to tracecat-mcp-community
 
 Thanks for your interest in contributing! Here's how to get started.
 
 ## Development Setup
 
 ```bash
-git clone https://github.com/adrojis/tracecat-mcp.git
-cd tracecat-mcp
+git clone https://github.com/adrojis/tracecat-mcp-community.git
+cd tracecat-mcp-community
 npm install
 cp .env.example .env
 # Edit .env with your Tracecat credentials
@@ -53,7 +53,7 @@ src/
 
 ## Reporting Issues
 
-- Use [GitHub Issues](https://github.com/adrojis/tracecat-mcp/issues)
+- Use [GitHub Issues](https://github.com/adrojis/tracecat-mcp-community/issues)
 - Include your Tracecat version and Node.js version
 - Provide steps to reproduce the problem
 - Redact any credentials or sensitive data from logs
