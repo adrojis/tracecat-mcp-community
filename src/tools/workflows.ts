@@ -139,8 +139,14 @@ export function registerWorkflowTools(server: McpServer, client: TracecatClient)
       for (const action of actions) {
         const label = action.title || action.id;
 
-        // Check inputs
-        if (!action.inputs || Object.keys(action.inputs).length === 0) {
+        // Check inputs — inputs can be a YAML string or an object
+        const rawInputs = action.inputs as unknown;
+        const hasInputs = rawInputs &&
+          (typeof rawInputs === "string"
+            ? (rawInputs as string).trim().length > 0
+            : typeof rawInputs === "object" && Object.keys(rawInputs as Record<string, unknown>).length > 0);
+
+        if (!hasInputs) {
           warnings.push(`Action "${label}" has empty inputs`);
         } else {
           // Check for unclosed expressions in input values

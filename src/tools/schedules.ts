@@ -22,8 +22,8 @@ export function registerScheduleTools(server: McpServer, client: TracecatClient)
     "Create a new schedule for a workflow (cron or interval)",
     {
       workflow_id: z.string().describe("Workflow ID to schedule"),
-      cron: z.string().optional().describe("Cron expression (e.g. '0 */5 * * *' for every 5 hours)"),
-      every: z.string().optional().describe("Interval string (e.g. '5m', '1h', '1d')"),
+      cron: z.string().optional().describe("Cron expression (e.g. '*/5 * * * *' for every 5 minutes, '0 */2 * * *' for every 2 hours)"),
+      every: z.string().optional().describe("ISO 8601 duration string (e.g. 'PT5M' for 5 minutes, 'PT1H' for 1 hour, 'P1D' for 1 day). NOT shorthand like '5m'."),
       inputs: z.record(z.unknown()).optional().describe("Input payload for each scheduled run"),
     },
     async ({ workflow_id, cron, every, inputs }) => {
@@ -53,8 +53,8 @@ export function registerScheduleTools(server: McpServer, client: TracecatClient)
     "Update a schedule (cron, interval, status, inputs)",
     {
       schedule_id: z.string().describe("Schedule ID"),
-      cron: z.string().optional().describe("New cron expression"),
-      every: z.string().optional().describe("New interval string"),
+      cron: z.string().optional().describe("New cron expression (e.g. '*/5 * * * *')"),
+      every: z.string().optional().describe("ISO 8601 duration (e.g. 'PT5M' for 5 minutes, 'PT1H' for 1 hour)"),
       inputs: z.record(z.unknown()).optional().describe("New input payload"),
       status: z.string().optional().describe("New status (online/offline)"),
     },

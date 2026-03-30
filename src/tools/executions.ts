@@ -11,7 +11,11 @@ export function registerExecutionTools(server: McpServer, client: TracecatClient
       payload: z.record(z.unknown()).optional().describe("Input payload for the workflow execution"),
     },
     async ({ workflow_id, payload }) => {
-      const result = await client.post(`/workflows/${workflow_id}/execute`, payload ?? {});
+      const body: Record<string, unknown> = { workflow_id };
+      if (payload && Object.keys(payload).length > 0) {
+        body.inputs = payload;
+      }
+      const result = await client.post(`/workflow-executions`, body);
       return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
     }
   );
@@ -41,6 +45,23 @@ export function registerExecutionTools(server: McpServer, client: TracecatClient
     async ({ execution_id }) => {
       const execution = await client.get(`/workflow-executions/${execution_id}`);
       return { content: [{ type: "text", text: JSON.stringify(execution, null, 2) }] };
+    }
+  );
+
+  server.tool(
+    "tracecat_run_workflow_draft",
+    "Execute a workflow in DRAFT mode (uses uncommitted version, useful for testing before deploy)",
+    {
+      workflow_id: z.string().describe("Workflow ID"),
+      payload: z.record(z.unknown()).optional().describe("Input payload for the workflow execution"),
+    },
+    async ({ workflow_id, payload }) => {
+      const body: Record<string, unknown> = { workflow_id };
+      if (payload && Object.keys(payload).length > 0) {
+        body.inputs = payload;
+      }
+      const result = await client.post(`/workflow-executions/draft`, body);
+      return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
     }
   );
 

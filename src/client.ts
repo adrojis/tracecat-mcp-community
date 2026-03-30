@@ -121,12 +121,22 @@ export class TracecatClient {
       );
     }
 
-    const contentType = response.headers.get("content-type");
-    if (contentType?.includes("application/json")) {
-      return (await response.json()) as T;
+    // Handle empty responses (204 No Content, or empty body)
+    if (response.status === 204) {
+      return { success: true } as unknown as T;
     }
 
-    return (await response.text()) as unknown as T;
+    const text = await response.text();
+    if (!text || text.trim() === "") {
+      return { success: true } as unknown as T;
+    }
+
+    const contentType = response.headers.get("content-type");
+    if (contentType?.includes("application/json")) {
+      return JSON.parse(text) as T;
+    }
+
+    return text as unknown as T;
   }
 
   async get<T = unknown>(
