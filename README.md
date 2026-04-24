@@ -4,13 +4,13 @@
 
 # tracecat-mcp-community
 
-**A full-stack Model Context Protocol (MCP) server for the [Tracecat](https://tracecat.com) SOAR platform — 73 tools across 14 domains.**
+**A full-stack Model Context Protocol (MCP) server for the [Tracecat](https://tracecat.com) SOAR platform — 94 tools across 16 domains.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![npm version](https://img.shields.io/npm/v/tracecat-mcp-community.svg)](https://www.npmjs.com/package/tracecat-mcp-community)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
 [![CI](https://github.com/adrojis/tracecat-mcp-community/actions/workflows/ci.yml/badge.svg)](https://github.com/adrojis/tracecat-mcp-community/actions/workflows/ci.yml)
-[![Tracecat](https://img.shields.io/badge/Tracecat-v1.0.0--beta.31-purple.svg)](https://github.com/TracecatHQ/tracecat)
+[![Tracecat](https://img.shields.io/badge/Tracecat-v1.0.0--beta.42-purple.svg)](https://github.com/TracecatHQ/tracecat)
 [![MCP](https://img.shields.io/badge/MCP-Server-green.svg)](https://modelcontextprotocol.io)
 [![Docker](https://img.shields.io/badge/Docker-ready-blue.svg)](#docker)
 
@@ -20,7 +20,7 @@
 
 An [MCP server](https://modelcontextprotocol.io) that gives AI assistants (Claude Code, Claude Desktop, etc.) full control over a [Tracecat](https://github.com/TracecatHQ/tracecat) instance through natural language. Manage workflows, actions, cases, secrets, tables, schedules, graphs, and more — without leaving your editor.
 
-- **73 tools** covering the full Tracecat API surface, including write operations not exposed by the official MCP
+- **94 tools** covering the full Tracecat API surface, including write operations not exposed by the official MCP
 - **Stdio transport** — no OIDC/SSO setup required, works against any self-hosted Tracecat
 - **Lazy authentication** — MCP transport starts instantly, login happens on first tool call
 - **Auto workspace detection** — no manual workspace ID needed
@@ -37,8 +37,8 @@ Tracecat ships an [official MCP server](https://docs.tracecat.com/automations/tr
 | **Transport** | stdio (local) | HTTP (remote) |
 | **Auth** | Session cookie (username/password) | OIDC / SSO |
 | **Setup** | `npx tracecat-mcp-community` + `.env` | Requires OIDC configured on the Tracecat instance |
-| **Tool coverage** | 73 tools — full CRUD + graph ops + autofix | ~80 tools — read + basic CRUD |
-| **Exclusive capabilities** | Graph editing (`add_edges`, `move_nodes`, `autofix_workflow`), Schedules CRUD, Secrets write, Cases CRUD, Actions CRUD, Templates, Webhook key rotation | Case tags/fields metadata, official support, platform-integrated |
+| **Tool coverage** | 94 tools — full CRUD + graph ops + autofix + variables/integrations | ~90 tools — read + basic CRUD, plus agents/skills (EE-oriented) |
+| **Exclusive capabilities** | Graph editing (`add_edges`, `move_nodes`, `autofix_workflow`), Schedules CRUD, Secrets write, Cases CRUD + tasks + fields, Actions CRUD, Variables CRUD, Integrations management, Templates, Webhook key rotation | Agent presets/skills/sessions (Enterprise Edition), official support, platform-integrated |
 | **Best for** | Local dev, self-hosted without SSO, workflow authoring/editing at scale | Teams already running Tracecat Cloud or self-hosted with OIDC |
 
 You don't need both. This community MCP is designed to cover the full surface on its own.
@@ -52,8 +52,9 @@ You don't need both. This community MCP is designed to cover the full surface on
 | **Workflows** | 9 | List, create, get, update, deploy, export, delete, validate, autofix |
 | **Actions** | 5 | List, create, get, update, delete workflow actions |
 | **Executions** | 6 | Run workflows, run drafts, list/get/cancel executions, compact view |
-| **Cases** | 7 | List, create, get, update, delete cases; add/list comments |
+| **Cases** | 15 | List, create, get, update, delete cases; comments; tasks CRUD; custom fields CRUD |
 | **Secrets** | 5 | Search, create, get, update, delete secrets |
+| **Variables** | 6 | List, search, get, create, update, delete non-sensitive workspace variables |
 | **Tables** | 5 | List, create, get, update, delete tables |
 | **Columns** | 2 | Create, delete table columns |
 | **Rows** | 6 | List, get, insert, update, delete, batch insert rows |
@@ -61,12 +62,13 @@ You don't need both. This community MCP is designed to cover the full surface on
 | **Graph** | 5 | Get graph, add/delete edges, move nodes, update trigger position |
 | **Folders** | 5 | List, create, update, delete folders; move workflows into folders |
 | **Workspaces** | 5 | Get current, list, create, update, delete workspaces |
+| **Integrations** | 7 | List/get/test/disconnect/delete integrations; list/get OAuth providers |
 | **Webhooks** | 3 | Get/update webhook, rotate API keys |
 | **Docs** | 2 | Search Tracecat docs, list available tool documentation |
 | **Templates** | 2 | List and get community workflow templates |
 | **System** | 1 | Health check |
 
-> **Total: 73 tools** for complete Tracecat automation.
+> **Total: 94 tools** for complete Tracecat automation.
 
 ---
 
@@ -145,7 +147,7 @@ docker build -t tracecat-mcp-community .
 
 > **Security:** `.env` is gitignored and never committed. Never hardcode credentials in source files. See [SECURITY.md](SECURITY.md).
 
-Then restart Claude Code and verify with `/mcp` — you should see the `tracecat` server with 73 tools.
+Then restart Claude Code and verify with `/mcp` — you should see the `tracecat` server with 94 tools.
 
 ---
 
@@ -171,20 +173,22 @@ src/
 ├── client.ts         # HTTP client with lazy auth + auto workspace injection
 ├── types.ts          # TypeScript interfaces
 └── tools/
-    ├── workflows.ts  # Workflow CRUD + deploy/export/validate/autofix
-    ├── actions.ts    # Action CRUD with YAML inputs
-    ├── cases.ts      # Case management + comments
-    ├── executions.ts # Run (live + draft), list, cancel, inspect executions
-    ├── secrets.ts    # Secret management
-    ├── tables.ts     # Tables, columns, and rows
-    ├── graph.ts      # Graph operations (get graph, edges, node positions)
-    ├── folders.ts    # Folder CRUD + move workflow into folder
-    ├── workspaces.ts # Workspace CRUD + current-workspace info
-    ├── webhooks.ts   # Webhook get/update + key rotation
-    ├── schedules.ts  # Cron/interval scheduling
-    ├── docs.ts       # Documentation search
-    ├── templates.ts  # Community workflow templates
-    └── system.ts     # Health check
+    ├── workflows.ts    # Workflow CRUD + deploy/export/validate/autofix
+    ├── actions.ts      # Action CRUD with YAML inputs
+    ├── cases.ts        # Case CRUD + comments + tasks + custom fields
+    ├── executions.ts   # Run (live + draft), list, cancel, inspect executions
+    ├── secrets.ts      # Secret management
+    ├── variables.ts    # Non-sensitive workspace variables CRUD
+    ├── tables.ts       # Tables, columns, and rows
+    ├── graph.ts        # Graph operations (get graph, edges, node positions)
+    ├── folders.ts      # Folder CRUD + move workflow into folder
+    ├── workspaces.ts   # Workspace CRUD + current-workspace info
+    ├── integrations.ts # OAuth integrations + providers
+    ├── webhooks.ts     # Webhook get/update + key rotation
+    ├── schedules.ts    # Cron/interval scheduling
+    ├── docs.ts         # Documentation search
+    ├── templates.ts    # Community workflow templates
+    └── system.ts       # Health check
 ```
 
 ---
@@ -248,7 +252,7 @@ Tests use Node.js built-in test runner (no extra dependencies). See [CONTRIBUTIN
 
 ## MCP Inspector
 
-The [MCP Inspector](https://github.com/modelcontextprotocol/inspector) is a visual debugging tool that lets you browse and test all 73 tools interactively in your browser — useful for verifying your setup, exploring tool schemas, and testing API calls without Claude.
+The [MCP Inspector](https://github.com/modelcontextprotocol/inspector) is a visual debugging tool that lets you browse and test all 94 tools interactively in your browser — useful for verifying your setup, exploring tool schemas, and testing API calls without Claude.
 
 From the project root:
 

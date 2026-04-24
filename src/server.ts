@@ -14,6 +14,8 @@ import { registerDocTools } from "./tools/docs.js";
 import { registerTemplateTools } from "./tools/templates.js";
 import { registerFolderTools } from "./tools/folders.js";
 import { registerWorkspaceTools } from "./tools/workspaces.js";
+import { registerVariableTools } from "./tools/variables.js";
+import { registerIntegrationTools } from "./tools/integrations.js";
 
 export function createServer(client: TracecatClient): McpServer {
   const server = new McpServer({
@@ -35,6 +37,8 @@ export function createServer(client: TracecatClient): McpServer {
   registerTemplateTools(server, client);
   registerFolderTools(server, client);
   registerWorkspaceTools(server, client);
+  registerVariableTools(server, client);
+  registerIntegrationTools(server, client);
 
   return server;
 }
