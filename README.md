@@ -4,7 +4,7 @@
 
 # tracecat-mcp-community
 
-**A Model Context Protocol (MCP) server for the [Tracecat](https://tracecat.com) SOAR platform — 49 tools across 12 domains.**
+**A full-stack Model Context Protocol (MCP) server for the [Tracecat](https://tracecat.com) SOAR platform — 73 tools across 14 domains.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![npm version](https://img.shields.io/npm/v/tracecat-mcp-community.svg)](https://www.npmjs.com/package/tracecat-mcp-community)
@@ -18,12 +18,30 @@
 
 ## What is this?
 
-An [MCP server](https://modelcontextprotocol.io) that gives AI assistants (Claude Code, Claude Desktop, etc.) full control over a [Tracecat](https://github.com/TracecatHQ/tracecat) instance through natural language. Manage workflows, actions, cases, secrets, tables, schedules, and more — without leaving your editor.
+An [MCP server](https://modelcontextprotocol.io) that gives AI assistants (Claude Code, Claude Desktop, etc.) full control over a [Tracecat](https://github.com/TracecatHQ/tracecat) instance through natural language. Manage workflows, actions, cases, secrets, tables, schedules, graphs, and more — without leaving your editor.
 
-- **49 tools** covering the full Tracecat API surface
+- **73 tools** covering the full Tracecat API surface, including write operations not exposed by the official MCP
+- **Stdio transport** — no OIDC/SSO setup required, works against any self-hosted Tracecat
 - **Lazy authentication** — MCP transport starts instantly, login happens on first tool call
 - **Auto workspace detection** — no manual workspace ID needed
 - **Session cookie auth** — handles Tracecat's cookie-based auth transparently
+
+---
+
+## Community MCP vs Official MCP
+
+Tracecat ships an [official MCP server](https://docs.tracecat.com/automations/tracecat-mcp) (HTTP transport, OIDC auth, bundled with the platform). This community MCP is a **standalone alternative** you can use instead — pick the one that fits your setup.
+
+| | Community MCP (this project) | [Official MCP](https://docs.tracecat.com/automations/tracecat-mcp) |
+|---|---|---|
+| **Transport** | stdio (local) | HTTP (remote) |
+| **Auth** | Session cookie (username/password) | OIDC / SSO |
+| **Setup** | `npx tracecat-mcp-community` + `.env` | Requires OIDC configured on the Tracecat instance |
+| **Tool coverage** | 73 tools — full CRUD + graph ops + autofix | ~80 tools — read + basic CRUD |
+| **Exclusive capabilities** | Graph editing (`add_edges`, `move_nodes`, `autofix_workflow`), Schedules CRUD, Secrets write, Cases CRUD, Actions CRUD, Templates, Webhook key rotation | Case tags/fields metadata, official support, platform-integrated |
+| **Best for** | Local dev, self-hosted without SSO, workflow authoring/editing at scale | Teams already running Tracecat Cloud or self-hosted with OIDC |
+
+You don't need both. This community MCP is designed to cover the full surface on its own.
 
 ---
 
@@ -33,20 +51,22 @@ An [MCP server](https://modelcontextprotocol.io) that gives AI assistants (Claud
 |---|---|---|
 | **Workflows** | 9 | List, create, get, update, deploy, export, delete, validate, autofix |
 | **Actions** | 5 | List, create, get, update, delete workflow actions |
-| **Executions** | 5 | Run workflows, list/get/cancel executions, compact view |
+| **Executions** | 6 | Run workflows, run drafts, list/get/cancel executions, compact view |
 | **Cases** | 7 | List, create, get, update, delete cases; add/list comments |
 | **Secrets** | 5 | Search, create, get, update, delete secrets |
 | **Tables** | 5 | List, create, get, update, delete tables |
 | **Columns** | 2 | Create, delete table columns |
 | **Rows** | 6 | List, get, insert, update, delete, batch insert rows |
 | **Schedules** | 5 | List, create, get, update, delete schedules |
-| **Graph** | 3 | Add edges, move nodes, update trigger position |
-| **Webhooks** | 1 | Generate/rotate webhook API keys |
+| **Graph** | 5 | Get graph, add/delete edges, move nodes, update trigger position |
+| **Folders** | 5 | List, create, update, delete folders; move workflows into folders |
+| **Workspaces** | 5 | Get current, list, create, update, delete workspaces |
+| **Webhooks** | 3 | Get/update webhook, rotate API keys |
 | **Docs** | 2 | Search Tracecat docs, list available tool documentation |
 | **Templates** | 2 | List and get community workflow templates |
 | **System** | 1 | Health check |
 
-> **Total: 49 tools** for complete Tracecat automation.
+> **Total: 73 tools** for complete Tracecat automation.
 
 ---
 
@@ -125,7 +145,7 @@ docker build -t tracecat-mcp-community .
 
 > **Security:** `.env` is gitignored and never committed. Never hardcode credentials in source files. See [SECURITY.md](SECURITY.md).
 
-Then restart Claude Code and verify with `/mcp` — you should see the `tracecat` server with 49 tools.
+Then restart Claude Code and verify with `/mcp` — you should see the `tracecat` server with 73 tools.
 
 ---
 
@@ -154,11 +174,13 @@ src/
     ├── workflows.ts  # Workflow CRUD + deploy/export/validate/autofix
     ├── actions.ts    # Action CRUD with YAML inputs
     ├── cases.ts      # Case management + comments
-    ├── executions.ts # Run, list, cancel, inspect executions
+    ├── executions.ts # Run (live + draft), list, cancel, inspect executions
     ├── secrets.ts    # Secret management
     ├── tables.ts     # Tables, columns, and rows
-    ├── graph.ts      # Graph operations (edges, node positions)
-    ├── webhooks.ts   # Webhook key rotation
+    ├── graph.ts      # Graph operations (get graph, edges, node positions)
+    ├── folders.ts    # Folder CRUD + move workflow into folder
+    ├── workspaces.ts # Workspace CRUD + current-workspace info
+    ├── webhooks.ts   # Webhook get/update + key rotation
     ├── schedules.ts  # Cron/interval scheduling
     ├── docs.ts       # Documentation search
     ├── templates.ts  # Community workflow templates
@@ -226,7 +248,7 @@ Tests use Node.js built-in test runner (no extra dependencies). See [CONTRIBUTIN
 
 ## MCP Inspector
 
-The [MCP Inspector](https://github.com/modelcontextprotocol/inspector) is a visual debugging tool that lets you browse and test all 49 tools interactively in your browser — useful for verifying your setup, exploring tool schemas, and testing API calls without Claude.
+The [MCP Inspector](https://github.com/modelcontextprotocol/inspector) is a visual debugging tool that lets you browse and test all 73 tools interactively in your browser — useful for verifying your setup, exploring tool schemas, and testing API calls without Claude.
 
 From the project root:
 
@@ -255,10 +277,12 @@ Contributions, issues, and feature requests are welcome.
 
 ## Related Projects
 
+- [Tracecat official MCP](https://docs.tracecat.com/automations/tracecat-mcp) — HTTP/OIDC MCP bundled with the platform (alternative to this one)
 - [tracecat-skills](https://github.com/adrojis/tracecat-skills) — Claude Code skills for Tracecat workflow building
-> **Note:** This project was previously named `tracecat-mcp`. It has been renamed to `tracecat-mcp-community` to clearly distinguish it from [Tracecat's official MCP server](https://github.com/TracecatHQ/tracecat) which uses OAuth authentication.
 - [Tracecat](https://github.com/TracecatHQ/tracecat) — The open-source SOAR platform
 - [MCP SDK](https://github.com/modelcontextprotocol/typescript-sdk) — Model Context Protocol TypeScript SDK
+
+> **Note:** This project was previously named `tracecat-mcp`. It was renamed to `tracecat-mcp-community` in April 2026 to distinguish it from Tracecat's official MCP server (HTTP + OIDC), which shipped shortly after.
 
 ---
 

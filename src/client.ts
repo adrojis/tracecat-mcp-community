@@ -154,8 +154,17 @@ export class TracecatClient {
     return this.request<T>("PATCH", path, body, queryParams);
   }
 
-  async delete<T = unknown>(path: string, queryParams?: Record<string, string>): Promise<T> {
-    return this.request<T>("DELETE", path, undefined, queryParams);
+  async delete<T = unknown>(path: string, bodyOrParams?: Record<string, unknown> | Record<string, string>, queryParams?: Record<string, string>): Promise<T> {
+    // If queryParams is provided, bodyOrParams is the body
+    // If only bodyOrParams is provided and no queryParams, treat as queryParams for backwards compat (no body)
+    if (queryParams !== undefined) {
+      return this.request<T>("DELETE", path, bodyOrParams, queryParams);
+    }
+    return this.request<T>("DELETE", path, undefined, bodyOrParams as Record<string, string>);
+  }
+
+  async deleteWithBody<T = unknown>(path: string, body: unknown, queryParams?: Record<string, string>): Promise<T> {
+    return this.request<T>("DELETE", path, body, queryParams);
   }
 
   async initWorkspaceId(): Promise<void> {
